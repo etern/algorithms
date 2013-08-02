@@ -46,52 +46,60 @@ namespace WindowsFormsApplication1
             this.toolStripButton1});
             this.toolStrip1.Location = new System.Drawing.Point(0, 0);
             this.toolStrip1.Name = "toolStrip1";
-            this.toolStrip1.Size = new System.Drawing.Size(553, 28);
+            this.toolStrip1.Size = new System.Drawing.Size(630, 25);
             this.toolStrip1.TabIndex = 1;
             this.toolStrip1.Text = "toolStrip1";
             // 
             // toolStripLabel1
             // 
             this.toolStripLabel1.Name = "toolStripLabel1";
-            this.toolStripLabel1.Size = new System.Drawing.Size(40, 25);
+            this.toolStripLabel1.Size = new System.Drawing.Size(35, 22);
             this.toolStripLabel1.Text = "size:";
             // 
             // toolStripComboBox1
             // 
             this.toolStripComboBox1.Items.AddRange(new object[] {
+            "30x30",
             "50x50",
-            "100x100"});
+            "80x80"});
             this.toolStripComboBox1.Name = "toolStripComboBox1";
-            this.toolStripComboBox1.Size = new System.Drawing.Size(121, 28);
+            this.toolStripComboBox1.Size = new System.Drawing.Size(92, 25);
             this.toolStripComboBox1.Tag = "";
-            this.toolStripComboBox1.Text = "50x50";
+            this.toolStripComboBox1.Text = "30x30";
+            this.toolStripComboBox1.DropDownClosed += new System.EventHandler(this.toolStripComboBox1_DropDownClosed);
+            this.toolStripComboBox1.TextChanged += new System.EventHandler(this.toolStripComboBox1_TextChanged);
             // 
             // toolStripButton1
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.toolStripButton1.BackColor = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(0)))));
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.None;
             this.toolStripButton1.Image = ((System.Drawing.Image)(resources.GetObject("toolStripButton1.Image")));
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(23, 25);
+            this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
             this.toolStripButton1.Text = "toolStripButton1";
             this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // mainPanel
             // 
-            this.mainPanel.Location = new System.Drawing.Point(2, 36);
+            this.mainPanel.BackColor = System.Drawing.Color.White;
+            this.mainPanel.Location = new System.Drawing.Point(14, 30);
+            this.mainPanel.Margin = new System.Windows.Forms.Padding(5);
             this.mainPanel.Name = "mainPanel";
-            this.mainPanel.Size = new System.Drawing.Size(551, 377);
+            this.mainPanel.Size = new System.Drawing.Size(602, 396);
             this.mainPanel.TabIndex = 2;
             // 
             // Form1
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 15F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(553, 413);
+            this.ClientSize = new System.Drawing.Size(630, 440);
             this.Controls.Add(this.mainPanel);
             this.Controls.Add(this.toolStrip1);
+            this.Margin = new System.Windows.Forms.Padding(2);
             this.Name = "Form1";
             this.Text = "Form1";
+            this.Shown += new System.EventHandler(this.Form1_Shown);
             this.toolStrip1.ResumeLayout(false);
             this.toolStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -107,14 +115,14 @@ namespace WindowsFormsApplication1
         private System.Windows.Forms.Panel mainPanel;
         private System.Windows.Forms.ToolStripLabel toolStripLabel1;
 
-        private bool PaintGrid(System.Drawing.Size gridSize){
-            System.Drawing.Size panelSize = mainPanel.ClientSize;
-            System.Drawing.Size rectSize = new System.Drawing.Size(panelSize.Width / gridSize.Width, panelSize.Height / gridSize.Height);
+        private bool PaintGrid(Size gridSize){
+            Size panelSize = mainPanel.ClientSize;
+            Size rectSize = new Size(panelSize.Width / gridSize.Width, panelSize.Height / gridSize.Height);
             int gridCount = gridSize.Width*gridSize.Height;
-            Rectangle[] rects = new Rectangle[gridCount];
-            for (int i=0;i<gridSize.Width;i++)
+            Rectangle[ , ] rects = new Rectangle[gridSize.Height,gridSize.Width];//2d array
+            for (int i=0;i<gridSize.Height;i++)
             {
-                for(int j=0;j<gridSize.Height;j++){
+                for(int j=0;j<gridSize.Width;j++){
                     rects[i * gridSize.Width + j].Size = rectSize;
                     rects[i * gridSize.Width + j].X = i*rectSize.Width;
                     rects[i * gridSize.Width + j].Y = j*rectSize.Height;
@@ -122,6 +130,7 @@ namespace WindowsFormsApplication1
             
             }
             System.Drawing.Graphics g = this.mainPanel.CreateGraphics();
+            g.Clear(Color.White);
             System.Drawing.Pen pen = new System.Drawing.Pen(Color.Black, 1);
             g.DrawRectangles(pen,rects);
             return true;
